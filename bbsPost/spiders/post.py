@@ -13,7 +13,7 @@ from  bbsPost.items import BbspostItem
 from bbsPost import settings
 
 import os
-
+import base64
 
 class PostSpider(scrapy.Spider):
     name = "post"
@@ -130,14 +130,14 @@ class PostSpider(scrapy.Spider):
     def afterLogin(self,response):
         logging.warning(str(response.body))
         contentLength =len(self.contentList)
-        contendIndex = random.randint(0,contentLength -1)
-        contendTag ='\n\n\n[------我只是论坛的搬运工------]'
-        contendUlti = self.contentList[contendIndex] + contendTag
-        yield FormRequest(url = 'http://bbs.byr.cn/article/BUPTNet/ajax_post.json'
+        contentIndex = random.randint(0,contentLength -1)
+        contentTag ='\n\n\n[------我只是论坛的搬运工------]'
+        contendUlti = 'base64.decode("'+base64.b64encode(self.contentList[contentIndex]) +'")'+ contentTag
+        yield FormRequest(url = 'http://bbs.byr.cn/article/Talking/ajax_post.json'
                           ,formdata={
                           'content':contendUlti
-                          ,'id':'75627'
-                          ,'subject':'Re: 信息黄埔，互联网+。。。。。。。'
+                          ,'id':'5709271'
+                          ,'subject':'Re: 这回，我们啥也不乱说'
                             }
                           ,callback=self.parse)
     def parse(self, response):
