@@ -130,8 +130,8 @@ class PostSpider(scrapy.Spider):
                         #       ,'CookieDate':'2'
                         #   }
                           formdata={
-                              'id':'heamon7'
-                              ,'passwd':'111111'
+                              'id':'???'
+                              ,'passwd':'???'
                               ,'CookieDate':'2'
                           }
                           ,callback = self.afterLogin)
@@ -161,8 +161,8 @@ class PostSpider(scrapy.Spider):
 
 -- send by scrapy
 '''
-        for board_id in board_list:
-            request_url = request_base_url.replace('BOARD_ID',board_id)
+        for board_id in self.board_list:
+            request_url = self.request_base_url.replace('BOARD_ID',board_id)
             yield FormRequest(url = request_url
                               ,formdata={
                                'subject': subject
@@ -172,6 +172,8 @@ class PostSpider(scrapy.Spider):
                                 }
                               ,callback=self.parse)
     def parse(self, response):
+        with open('logfile.txt','a+') as fo:
+            fo.write(response.body)
         logging.warning(str(response.body))
 
         item = BbspostItem()
